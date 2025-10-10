@@ -26,7 +26,7 @@ The below are Python libraries and can be install with something like *pip*.
 	- requests
 	- websockets
 
-##How to Build
+## How to Build
 If you are in a Linux environment run *cmake* in the build folder as shown below.
 
 To make and enter the build directory
