@@ -29,8 +29,9 @@ The below are Python libraries and can be install with something like *pip*.
 ##How to Build
 If you are in a Linux environment run *cmake* in the build folder as shown below.
 
-To enter the build directory
+To make and enter the build directory
 
+	mkdir build
 	cd build/
 
 To build the binary
