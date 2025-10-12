@@ -135,7 +135,7 @@ int main() {
 	// print_df(db[0]);             Print dataframe
 	// print_df_float(dbf[0]);      Print change in value
 	// print_df_float_per(dbfp[0]); Print change in value as percentage
-	// print_df_bool(dbb[0]);       Print if change if positive
+	// print_df_bool(dbb[0]);       Print if change is positive or not
 	print_df(db[0]);
 	print_df_float(dbf[0]);
 	print_df_float_per(dbfp[0]);
