@@ -10,7 +10,7 @@ Dependencies needed:
 - Python
 - pybind11
 
-The below are Python libraries and can be install with something like *pip*.
+The below are Python libraries. They can be install with something like *pip*.
 
 - yfinance and its dependencies
 	- beautifulsoup4
@@ -27,7 +27,7 @@ The below are Python libraries and can be install with something like *pip*.
 	- websockets
 
 ## How to Build
-If you are in a Linux environment run *cmake* in the build folder as shown below.
+If you are in a Linux environment, run *cmake* in the build folder as shown below.
 
 To make and enter the build directory
 
