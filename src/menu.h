@@ -42,19 +42,16 @@ void option_print(std::vector<std::string>& cmd, database& db, const flag& f)
 	}
 	if (cmd[1][0] == '-') {
 		std::cout << "Index cannot be a negative number\n";
-		return;
-	}
-	if (index >= db.df.size()) {
+	} else if (index >= db.df.size()) {
 		std::cout << "There is not a dataframe releated to that index\nPlease run \"print list\"\n";
-		return;
-	}
-	if (cmd.size() == 2) {
+	} else if (cmd.size() == 2) {
 		print_df(db.df[index].sr, f, false);
-		return;
-	}
-	if (cmd[2] == "dif") {
+	} else if (cmd[2] == "dif") {
 		print_df(db.df[index].sr_dif, f, true);
-		return;
+	} else if (cmd[2] == "per") {
+		print_df(db.df[index].sr_per, f, true);
+	} else if (cmd[2] == "up") {
+		print_df(db.df[index].sr_up);
 	}
 
 	return;
@@ -145,7 +142,7 @@ void python_scope_guard(database& db, flag& f)
 	 * pybind11::scoped_interpreter guard{};
 	 * and it ends at the end of this scope (at the end of this function).
 	 */
-	pybind11::scoped_interpreter guard{};
+	pybind11::scoped_interpreter guard {};
 	while (true) {
 		if (menu(db, f))
 			break;
@@ -246,7 +243,8 @@ bool menu(database& db, flag& f)
 		try {
 			python_get_df(cmd, db);
 		} catch (pybind11::error_already_set const& ex) {
-			std::cout << "ERROR: pybind11::error_already_set\nUnable to grab stock data!\n";
+			std::cout << ex.what()
+			          << "\nERROR: pybind11::error_already_set\nUnable to grab stock data!\n";
 		}
 		return false;
 	}

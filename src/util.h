@@ -162,7 +162,8 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		std::cout << "Date format is incorrect\n";
 		return;
 	}
-	const pybind11::object pd_df {
+
+	pybind11::object pd_df {
 		pybind11::module_::import(
 			"yfinance"
 		).attr("Ticker")(cmd[1]).attr("history")(
@@ -229,6 +230,11 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		);
 		db.df[df_index].sr_dif[i_m].open = db.df[df_index].sr[i].open -
 		                                   db.df[df_index].sr[i_m].open;
+		db.df[df_index].sr_per[i_m].open
+		= db.df[df_index].sr_dif[i_m].open /
+		  db.df[df_index].sr[i_m].open;
+		if (db.df[df_index].sr_dif[i_m].open > 0)
+			db.df[df_index].sr_up[i_m].open = true;
 
 		// High
 		db.df[df_index].sr[i].high        = pybind11::float_(
@@ -236,6 +242,11 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		);
 		db.df[df_index].sr_dif[i_m].high = db.df[df_index].sr[i].high -
 		                                   db.df[df_index].sr[i_m].high;
+		db.df[df_index].sr_per[i_m].high
+		= db.df[df_index].sr_dif[i_m].high /
+		  db.df[df_index].sr[i_m].high;
+		if (db.df[df_index].sr_dif[i_m].high > 0)
+			db.df[df_index].sr_up[i_m].high = true;
 
 		// Low
 		db.df[df_index].sr[i].low         = pybind11::float_(
@@ -243,6 +254,11 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		);
 		db.df[df_index].sr_dif[i_m].low = db.df[df_index].sr[i].low -
 		                                  db.df[df_index].sr[i_m].low;
+		db.df[df_index].sr_per[i_m].low
+		= db.df[df_index].sr_dif[i_m].low /
+		  db.df[df_index].sr[i_m].low;
+		if (db.df[df_index].sr_dif[i_m].low > 0)
+			db.df[df_index].sr_up[i_m].low = true;
 
 		// Close
 		db.df[df_index].sr[i].close       = pybind11::float_(
@@ -251,6 +267,11 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_dif[i_m].close
 		= db.df[df_index].sr[i].close -
 		  db.df[df_index].sr[i_m].close;
+		db.df[df_index].sr_per[i_m].close
+		= db.df[df_index].sr_dif[i_m].close /
+		  db.df[df_index].sr[i_m].close;
+		if (db.df[df_index].sr_dif[i_m].close > 0)
+			db.df[df_index].sr_up[i_m].close = true;
 
 		// Volume
 		db.df[df_index].sr[i].volume      = pybind11::int_(
@@ -259,6 +280,11 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_dif[i_m].volume
 		= db.df[df_index].sr[i].volume -
 		  db.df[df_index].sr[i_m].volume;
+		db.df[df_index].sr_per[i_m].volume
+		= static_cast<double>(db.df[df_index].sr_dif[i_m].volume) /
+		  static_cast<double>(db.df[df_index].sr[i_m].volume);
+		if (db.df[df_index].sr_dif[i_m].volume > 0)
+			db.df[df_index].sr_up[i_m].volume = true;
 
 		// Dividends
 		db.df[df_index].sr[i].dividends   = pybind11::float_(
@@ -267,6 +293,11 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_dif[i_m].dividends
 		= db.df[df_index].sr[i].dividends -
 		  db.df[df_index].sr[i_m].dividends;
+		db.df[df_index].sr_per[i_m].dividends
+		= db.df[df_index].sr_dif[i_m].dividends /
+		  db.df[df_index].sr[i_m].dividends;
+		if (db.df[df_index].sr_dif[i_m].dividends > 0)
+			db.df[df_index].sr_up[i_m].dividends = true;
 
 		// Stocksplits
 		db.df[df_index].sr[i].stocksplits = pybind11::float_(
@@ -275,6 +306,11 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_dif[i_m].stocksplits
 		= db.df[df_index].sr[i].stocksplits -
 		  db.df[df_index].sr[i_m].stocksplits;
+		db.df[df_index].sr_per[i_m].stocksplits
+		= db.df[df_index].sr_dif[i_m].stocksplits /
+		  db.df[df_index].sr[i_m].stocksplits;
+		if (db.df[df_index].sr_dif[i_m].stocksplits > 0)
+			db.df[df_index].sr_up[i_m].stocksplits = true;
 
 		// Index
 		// I'm going to kill myself. I don't remember making this.
@@ -287,9 +323,16 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_dif[i_m].index
 		= db.df[df_index].sr[i].index -
 		  db.df[df_index].sr[1].index;
+		db.df[df_index].sr_per[i_m].index
+		= db.df[df_index].sr_dif[i_m].index;
+		db.df[df_index].sr_log[i_m].index
+		= db.df[df_index].sr_dif[i_m].index;
+		db.df[df_index].sr_up[i_m].index
+		= db.df[df_index].sr_dif[i_m].index;
 	}
 	db.df[df_index].start_date = db.df[df_index].sr[0].date;
 	db.df[df_index].end_date   = db.df[df_index].sr[n_of_row - 1].date;
+	PyDict_Clear(PyModule_GetDict(PyImport_AddModule("__main__")));
 
 	return;
 }
