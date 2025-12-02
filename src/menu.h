@@ -1,6 +1,7 @@
 #include "struc.h"
 #include "util.h"
 #include "print.h"
+#include "lstm.h"
 #include <pybind11/embed.h>
 #include <iostream>
 #include <iomanip>
@@ -9,7 +10,45 @@
 
 bool menu(database& df, flag& f);
 
-void option_print(std::vector<std::string>& cmd, database& db, const flag& f)
+void option_lstm (std::vector<std::string>& cmd, database& db)
+{
+	std::vector<std::string>::size_type index_m {};
+	std::vector<std::string>::size_type index_s0 {};
+	std::vector<std::string>::size_type index_s1 {};
+	std::vector<std::string>::size_type index_s2 {};
+
+	if (cmd.size() == 1 || cmd.size() == 3 || cmd.size() == 4) {
+		std::cout << "Not enough arguments.\n";
+	} else if (cmd.size() >= 6) {
+		std::cout << "Too many arguments.\n";
+	} else if (cmd.size() == 2) {
+		index_m = static_cast<std::vector<std::string>::size_type>(
+			std::stoull(cmd[1])
+		);
+		run_lstm(db.df[index_m]);
+	} else if (cmd.size() == 5) {
+		index_m = static_cast<std::vector<std::string>::size_type>(
+			std::stoull(cmd[1])
+		);
+		index_s0 = static_cast<std::vector<std::string>::size_type>(
+			std::stoull(cmd[2])
+		);
+		index_s1 = static_cast<std::vector<std::string>::size_type>(
+			std::stoull(cmd[3])
+		);
+		index_s2 = static_cast<std::vector<std::string>::size_type>(
+			std::stoull(cmd[4])
+		);
+		run_lstm(db.df[index_m],
+		         db.df[index_s0],
+		         db.df[index_s1],
+		         db.df[index_s2]);
+	}
+
+	return;
+}
+
+void option_print (std::vector<std::string>& cmd, database& db, const flag& f)
 {
 	int width {getw<std::vector<std::string>::size_type>(db.df.size())};
 	std::vector<dataframe>::size_type index {};
@@ -50,6 +89,8 @@ void option_print(std::vector<std::string>& cmd, database& db, const flag& f)
 		print_df(db.df[index].sr_dif, f, true);
 	} else if (cmd[2] == "per") {
 		print_df(db.df[index].sr_per, f, true);
+	} else if (cmd[2] == "log") {
+		print_df(db.df[index].sr_log, f, false);
 	} else if (cmd[2] == "up") {
 		print_df(db.df[index].sr_up);
 	}
@@ -202,7 +243,7 @@ bool menu(database& db, flag& f)
 		std::cout << "The Python interpreter is currently ";
 		if (!f.py_mode)
 			std::cout << "not ";
-		std::cout << "running\n\n\"#>\" Python-interpreter mode running\n\"$>\" Python-interpreter mode NOT running\n\nCan be run in either mode:\nhelp                Print out this message\nexit|q              Exits Python-interpreter mode or progam\n                    depending on what mode you are in\npython              Enters Python-interpreter mode\nilimit <option>     Sets the maximum number input characters\n                    <option>\n                    (number)  Sets limit to that number\n                    default   Sets limit to the default limit\n                    print     Prints current input limit\nprecision <option>  Sets the precision of floating-point numbers\n                    <option>\n                    (number)  Sets precision to that number\n                    default   Sets precision to the default number\n                    print     Prints current set floating-point precision\nprint list          Prints list of dataframes with their index.\nprint <index> <type>  Prints dataframe of a type.\n                    <type>\n                    <empty>   Prints default dataframe\n                    dif       Prints difference dataframe\n                    per       Prints percentage dataframe\n                    log       Prints log dataframe\n                    up        Prints up or down dataframe\n\nCan only be run in Python-interpreter mode:\ndebug               List python debug information\nget <ticker> <start_date> <end_date>  Get stock dataframe of TICKER\n                    Format:   get TICKER YYYY-MM-DD YYYY-MM-DD\n                    Example:  get AAPL 2023-01-01 2024-12-31\n\n";
+		std::cout << "running\n\n\"#>\" Python-interpreter mode running\n\"$>\" Python-interpreter mode NOT running\n\nCan be run in either mode:\nhelp                Print out this message\nexit|q              Exits Python-interpreter mode or progam\n                    depending on what mode you are in\npython              Enters Python-interpreter mode\nilimit <option>     Sets the maximum number input characters\n                    <option>\n                    (number)  Sets limit to that number\n                    default   Sets limit to the default limit\n                    print     Prints current input limit\nprecision <option>  Sets the precision of floating-point numbers\n                    <option>\n                    (number)  Sets precision to that number\n                    default   Sets precision to the default number\n                    print     Prints current set floating-point precision\nprint list          Prints list of dataframes with their index.\nprint <index> <type>  Prints dataframe of a type.\n                    <type>\n                    <empty>   Prints default dataframe\n                    dif       Prints difference dataframe\n                    per       Prints percentage dataframe\n                    log       Prints log dataframe\n                    up        Prints up or down dataframe\nlstm <index>        Runs LSTM on dataframe\nlstm <index> <subindex> <subindex> <subindex>\n                    Runs LSTM on dataframe including the month and the averages\n                    of the three sub-dataframes as parameters.\n\nCan only be run in Python-interpreter mode:\ndebug               List python debug information\nget <ticker> <start_date> <end_date>  Get stock dataframe of TICKER\n                    Format:   get TICKER YYYY-MM-DD YYYY-MM-DD\n                    Example:  get AAPL 2023-01-01 2024-12-31\n\n";
 		return false;
 	}
 	if (cmd[0] == "python") {
@@ -224,6 +265,10 @@ bool menu(database& db, flag& f)
 	}
 	if (cmd[0] == "print") {
 		option_print(cmd, db, f);
+		return false;
+	}
+	if (cmd[0] == "lstm") {
+		option_lstm(cmd, db);
 		return false;
 	}
 	if (cmd[0] == "debug" && check_py(f.py_mode)) {
@@ -252,13 +297,10 @@ bool menu(database& db, flag& f)
 	return false;
 }
 
-
-
-
 /*
-	python_get_df(db[0], "AAPL", "2023-01-01", "2024-12-31");
-	python_get_df(db[1], "TSLA", "2023-01-01", "2024-12-31");
-	python_get_df(db[2], "AMZN", "2023-01-01", "2024-12-31");
-	python_get_df(db[3], "V",    "2023-01-01", "2024-12-31");
-	python_get_df(db[4], "MSFT", "2023-01-01", "2024-12-31");
-	*/
+ * python_get_df(db[0], "AAPL", "2023-01-01", "2024-12-31");
+ * python_get_df(db[1], "TSLA", "2023-01-01", "2024-12-31");
+ * python_get_df(db[2], "AMZN", "2023-01-01", "2024-12-31");
+ * python_get_df(db[3], "V",    "2023-01-01", "2024-12-31");
+ * python_get_df(db[4], "MSFT", "2023-01-01", "2024-12-31");
+ */

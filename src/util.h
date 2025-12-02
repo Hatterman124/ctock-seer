@@ -4,116 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <chrono>
-
-void get_up_or_down(const std::vector<stockrow_f> dff,
-                    std::vector<stockrow_b>& dfb)
-{
-	stockrow_b temprow {};
-
-	for (std::vector<stockrow>::size_type i {1}; i < dff.size(); ++i) {
-		if (dff[i].open        > 0.0)
-			temprow.open        = true;
-		else
-			temprow.open        = false;
-		if (dff[i].high        > 0.0)
-			temprow.high        = true;
-		else
-			temprow.high        = false;
-		if (dff[i].low         > 0.0)
-			temprow.low         = true;
-		else
-			temprow.low         = false;
-		if (dff[i].close       > 0.0)
-			temprow.close       = true;
-		else
-			temprow.close       = false;
-		if (dff[i].volume      > 0.0)
-			temprow.volume      = true;
-		else
-			temprow.volume      = false;
-		if (dff[i].dividends   > 0.0)
-			temprow.dividends   = true;
-		else
-			temprow.dividends   = false;
-		if (dff[i].stocksplits > 0.0)
-			temprow.stocksplits = true;
-		else
-			temprow.stocksplits = false;
-		dfb.push_back(temprow);
-	}
-
-	return;
-}
-
-void get_change(const std::vector<stockrow> df,
-                    std::vector<stockrow_f>& dff)
-{
-	stockrow_f temprow {};
-	int prv_i {};
-
-	for (std::vector<stockrow>::size_type i {1}; i < df.size(); ++i) {
-		prv_i = i - 1;
-		temprow.open        = df[i].open
-		                      - df[prv_i].open;
-		temprow.high        = df[i].high
-		                      - df[prv_i].high;
-		temprow.low         = df[i].low
-		                      - df[prv_i].low;
-		temprow.close       = df[i].close
-		                      - df[prv_i].close;
-		temprow.volume      = static_cast<double>(df[i].volume)
-		                      - static_cast<double>(df[prv_i].volume);
-		temprow.dividends   = df[i].dividends
-		                      - df[prv_i].dividends;
-		temprow.stocksplits = df[i].stocksplits
-		                      - df[prv_i].stocksplits;
-		dff.push_back(temprow);
-	}
-
-	return;
-}
-
-void get_change_per(const std::vector<stockrow> df,
-                    std::vector<stockrow_f>& dffd)
-{
-	stockrow_f temprow {};
-	int prv_i {};
-
-	for (std::vector<stockrow>::size_type i {1}; i < df.size(); ++i) {
-		prv_i = i - 1;
-		temprow.open        = (df[i].open
-		                       - df[prv_i].open)
-		                      / df[prv_i].open
-		                      * 100.0;
-		temprow.high        = (df[i].high
-		                       - df[prv_i].high)
-		                      / df[prv_i].high
-		                      * 100.0;
-		temprow.low         = (df[i].low
-		                       - df[prv_i].low)
-		                      / df[prv_i].low
-		                      * 100.0;
-		temprow.close       = (df[i].close
-		                       - df[prv_i].close)
-		                      / df[prv_i].close
-		                      * 100.0;
-		temprow.volume      = (static_cast<double>(df[i].volume)
-		                       - static_cast<double>(df[prv_i].volume))
-		                      / static_cast<double>(df[prv_i].volume)
-		                      * 100.0;
-		temprow.dividends   = (df[i].dividends
-		                       - df[prv_i].dividends)
-		                      / df[prv_i].dividends
-		                      * 100.0;
-		temprow.stocksplits = (df[i].stocksplits
-		                       - df[prv_i].stocksplits)
-		                      / df[prv_i].stocksplits
-		                      * 100.0;
-		dffd.push_back(temprow);
-	}
-
-	return;
-}
+#include <cmath>
 
 bool check_digit(char c) {
 	for(int i {}; i < 10; ++i) {
@@ -126,6 +17,7 @@ bool check_digit(char c) {
 
 bool check_date_format(std::string s)
 {
+	// Absolute garbage. Looking at this makes me want to throw up.
 	if (s.size() != 10)
 		return false;
 	if (!check_digit(s[0]))
@@ -233,6 +125,9 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_per[i_m].open
 		= db.df[df_index].sr_dif[i_m].open /
 		  db.df[df_index].sr[i_m].open;
+		db.df[df_index].sr_log[i_m].open
+		= std::log(db.df[df_index].sr[i].open /
+		           db.df[df_index].sr[i_m].open);
 		if (db.df[df_index].sr_dif[i_m].open > 0)
 			db.df[df_index].sr_up[i_m].open = true;
 
@@ -245,6 +140,9 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_per[i_m].high
 		= db.df[df_index].sr_dif[i_m].high /
 		  db.df[df_index].sr[i_m].high;
+		db.df[df_index].sr_log[i_m].high
+		= std::log(db.df[df_index].sr[i].high /
+		           db.df[df_index].sr[i_m].high);
 		if (db.df[df_index].sr_dif[i_m].high > 0)
 			db.df[df_index].sr_up[i_m].high = true;
 
@@ -257,6 +155,9 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_per[i_m].low
 		= db.df[df_index].sr_dif[i_m].low /
 		  db.df[df_index].sr[i_m].low;
+		db.df[df_index].sr_log[i_m].low
+		= std::log(db.df[df_index].sr[i].low /
+		           db.df[df_index].sr[i_m].low);
 		if (db.df[df_index].sr_dif[i_m].low > 0)
 			db.df[df_index].sr_up[i_m].low = true;
 
@@ -270,6 +171,9 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_per[i_m].close
 		= db.df[df_index].sr_dif[i_m].close /
 		  db.df[df_index].sr[i_m].close;
+		db.df[df_index].sr_log[i_m].close
+		= std::log(db.df[df_index].sr[i].close /
+		           db.df[df_index].sr[i_m].close);
 		if (db.df[df_index].sr_dif[i_m].close > 0)
 			db.df[df_index].sr_up[i_m].close = true;
 
@@ -283,6 +187,9 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_per[i_m].volume
 		= static_cast<double>(db.df[df_index].sr_dif[i_m].volume) /
 		  static_cast<double>(db.df[df_index].sr[i_m].volume);
+		db.df[df_index].sr_log[i_m].volume
+		= std::log(static_cast<double>(db.df[df_index].sr[i].volume) /
+		           static_cast<double>(db.df[df_index].sr[i_m].volume));
 		if (db.df[df_index].sr_dif[i_m].volume > 0)
 			db.df[df_index].sr_up[i_m].volume = true;
 
@@ -296,6 +203,9 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_per[i_m].dividends
 		= db.df[df_index].sr_dif[i_m].dividends /
 		  db.df[df_index].sr[i_m].dividends;
+		db.df[df_index].sr_log[i_m].dividends
+		= std::log(db.df[df_index].sr[i].dividends /
+		           db.df[df_index].sr[i_m].dividends);
 		if (db.df[df_index].sr_dif[i_m].dividends > 0)
 			db.df[df_index].sr_up[i_m].dividends = true;
 
@@ -309,6 +219,9 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		db.df[df_index].sr_per[i_m].stocksplits
 		= db.df[df_index].sr_dif[i_m].stocksplits /
 		  db.df[df_index].sr[i_m].stocksplits;
+		db.df[df_index].sr_log[i_m].stocksplits
+		= std::log(db.df[df_index].sr[i].stocksplits /
+		           db.df[df_index].sr[i_m].stocksplits);
 		if (db.df[df_index].sr_dif[i_m].stocksplits > 0)
 			db.df[df_index].sr_up[i_m].stocksplits = true;
 

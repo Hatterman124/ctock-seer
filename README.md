@@ -3,12 +3,14 @@ ctock Seer (pronounced stock seer) is a example program written in c++, hence wh
 
 ## Dependencies
 ctock Seer uses *yfinance* to grab the stock data from Yahoo Finance's API. However, *yfinance* is a Python library. *pybind11* is then used to convert the Python database to c++ data types.
+*LibTorch* is used for the machine learning algorithim.
 
 Dependencies needed:
 
 - cmake (to build)
 - Python
 - pybind11
+- [LibTorch (PyTorch C++ API)](https://docs.pytorch.org/cppdocs/)
 
 The below are Python libraries. They can be install with something like *pip*.
 
@@ -36,13 +38,16 @@ To make and enter the build directory
 
 To build the binary
 
-	cmake ../
+CMAKE_PREFIX_PATH should be set to the absolute path to where you unzipped the LibTorch file.<br>
+You can download the zip file [here](https://pytorch.org/get-started/locally/).<br>
+Remember to click on C++/Java and correct compute platform you want.
+
+	cmake -DCMAKE_PREFIX_PATH=/absolute/path/to/libtorch ../
 	cmake --build ./
 
 To run the binary
 
 	./ctock-seer
 
-If you are in a Windows or macOS environment, good luck.
-
+If you are in a Windows or macOS environment, good luck.<br>
 Okay, I think you can just download *cmake* and run the commands above the same way, but I do not know.
