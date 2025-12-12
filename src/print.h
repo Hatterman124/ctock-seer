@@ -26,13 +26,13 @@ void print_df(const std::vector<stockrow> df,
 
 	int sft {1 + f.precision};
 	int b_sft {};
-	double greatest_open        {df[0].open};
-	double greatest_high        {df[0].high};
-	double greatest_low         {df[0].low};
-	double greatest_close       {df[0].close};
+	float greatest_open        {df[0].open};
+	float greatest_high        {df[0].high};
+	float greatest_low         {df[0].low};
+	float greatest_close       {df[0].close};
 	int    greatest_volume      {df[0].volume};
-	double greatest_dividends   {df[0].dividends};
-	double greatest_stocksplits {df[0].stocksplits};
+	float greatest_dividends   {df[0].dividends};
+	float greatest_stocksplits {df[0].stocksplits};
 
 	if (neg) {
 		++sft;
@@ -65,19 +65,19 @@ void print_df(const std::vector<stockrow> df,
 			std::cout << std::showpos;
 		std::cout << df[i].date        << " | "
 		          << std::fixed
-		          << std::setw(getw<double>(greatest_open)        + sft)
+		          << std::setw(getw<float>(greatest_open)        + sft)
 		          << df[i].open        << " | "
-		          << std::setw(getw<double>(greatest_high)        + sft)
+		          << std::setw(getw<float>(greatest_high)        + sft)
 		          << df[i].high        << " | "
-		          << std::setw(getw<double>(greatest_low)         + sft)
+		          << std::setw(getw<float>(greatest_low)         + sft)
 		          << df[i].low         << " | "
-		          << std::setw(getw<double>(greatest_close)       + sft)
+		          << std::setw(getw<float>(greatest_close)       + sft)
 		          << df[i].close       << " | "
 		          << std::setw(getw<int>(greatest_volume)       + b_sft)
 		          << df[i].volume      << " | "
-		          << std::setw(getw<double>(greatest_dividends)   + sft)
+		          << std::setw(getw<float>(greatest_dividends)   + sft)
 		          << df[i].dividends   << " | "
-		          << std::setw(getw<double>(greatest_stocksplits) + sft)
+		          << std::setw(getw<float>(greatest_stocksplits) + sft)
 		          << df[i].stocksplits << '\n';
 	}
 	std::cout << std::noshowpos;
@@ -92,13 +92,13 @@ void print_df(const std::vector<stockrow_f> df,
 
 	int sft {2 + f.precision};
 	std::string column {};
-	double greatest_open        {df[0].open};
-	double greatest_high        {df[0].high};
-	double greatest_low         {df[0].low};
-	double greatest_close       {df[0].close};
-	double greatest_volume      {df[0].volume};
-	double greatest_dividends   {df[0].dividends};
-	double greatest_stocksplits {df[0].stocksplits};
+	float greatest_open        {df[0].open};
+	float greatest_high        {df[0].high};
+	float greatest_low         {df[0].low};
+	float greatest_close       {df[0].close};
+	float greatest_volume      {df[0].volume};
+	float greatest_dividends   {df[0].dividends};
+	float greatest_stocksplits {df[0].stocksplits};
 
 	if (per)
 		column = "% | ";
@@ -131,19 +131,19 @@ void print_df(const std::vector<stockrow_f> df,
 		          << std::showpos
 		          << df[i].date        << " | "
 		          << std::fixed
-		          << std::setw(getw<double>(greatest_open)        + sft)
+		          << std::setw(getw<float>(greatest_open)        + sft)
 		          << df[i].open        << column
-		          << std::setw(getw<double>(greatest_high)        + sft)
+		          << std::setw(getw<float>(greatest_high)        + sft)
 		          << df[i].high        << column
-		          << std::setw(getw<double>(greatest_low)         + sft)
+		          << std::setw(getw<float>(greatest_low)         + sft)
 		          << df[i].low         << column
-		          << std::setw(getw<double>(greatest_close)       + sft)
+		          << std::setw(getw<float>(greatest_close)       + sft)
 		          << df[i].close       << column
-		          << std::setw(getw<double>(greatest_volume)      + sft)
+		          << std::setw(getw<float>(greatest_volume)      + sft)
 		          << df[i].volume      << column
-		          << std::setw(getw<double>(greatest_dividends)   + sft)
+		          << std::setw(getw<float>(greatest_dividends)   + sft)
 		          << df[i].dividends   << column
-		          << std::setw(getw<double>(greatest_stocksplits) + sft)
+		          << std::setw(getw<float>(greatest_stocksplits) + sft)
 		          << df[i].stocksplits;
 		if (per)
 			std::cout << "%\n";

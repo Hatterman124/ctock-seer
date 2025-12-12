@@ -5,30 +5,25 @@
 #include <limits>
 #pragma once
 
-constexpr int           i_min  {std::numeric_limits<int>::min()};
-constexpr int           i_max  {std::numeric_limits<int>::max()};
-constexpr unsigned long ul_min {std::numeric_limits<unsigned long>::min()};
-constexpr unsigned long ul_max {std::numeric_limits<unsigned long>::max()};
-constexpr std::string::size_type str_max {
-	std::numeric_limits<std::string::size_type>::max()
-};
-constexpr std::string            whitespace {" \f\n\r\t\v"};
-constexpr std::array<char, 10>   digits {'0', '1', '2', '3', '4',
-                                        '5', '6', '7', '8', '9'};
-constexpr std::string::size_type in_limit_default {32};
-constexpr std::string::size_type in_limit_min {16};
-constexpr int                    precision_default {11};
+constexpr int           I_MIN  {std::numeric_limits<int>::min()};
+constexpr int           I_MAX  {std::numeric_limits<int>::max()};
+constexpr unsigned long UL_MIN {std::numeric_limits<unsigned long>::min()};
+constexpr unsigned long UL_MAX {std::numeric_limits<unsigned long>::max()};
+constexpr std::string            WHITESPACE {" \f\n\r\t\v"};
+constexpr std::string::size_type IN_LIMIT_DEFAULT {80};
+constexpr std::string::size_type IN_LIMIT_MIN {16};
+constexpr int                    PRECISION_DEFAULT {11};
 
 struct stockrow {
 	int    index;
 	std::chrono::year_month_day date;
-	double open;
-	double high;
-	double low;
-	double close;
+	float open;
+	float high;
+	float low;
+	float close;
 	int    volume;
-	double dividends;
-	double stocksplits;
+	float dividends;
+	float stocksplits;
 };
 
 struct stockrow_b {
@@ -46,13 +41,13 @@ struct stockrow_b {
 struct stockrow_f {
 	int    index;
 	std::chrono::year_month_day date;
-	double open;
-	double high;
-	double low;
-	double close;
-	double volume;
-	double dividends;
-	double stocksplits;
+	float open;
+	float high;
+	float low;
+	float close;
+	float volume;
+	float dividends;
+	float stocksplits;
 };
 
 struct dataframe {

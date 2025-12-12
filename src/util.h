@@ -6,41 +6,23 @@
 #include <chrono>
 #include <cmath>
 
-bool check_digit(char c) {
-	for(int i {}; i < 10; ++i) {
-		if (c == digits[i])
-			return true;
-	}
-
-	return false;
-}
-
-bool check_date_format(std::string s)
+bool is_date_format(std::string s)
 {
 	// Absolute garbage. Looking at this makes me want to throw up.
-	if (s.size() != 10)
+	if (s.size() == 10
+	    && s[0] >= '0' && s[0] <= '9'
+	    && s[1] >= '0' && s[1] <= '9'
+	    && s[2] >= '0' && s[2] <= '9'
+	    && s[3] >= '0' && s[3] <= '9'
+	    && s[4] == '-'
+	    && s[5] >= '0' && s[5] <= '9'
+	    && s[6] >= '0' && s[6] <= '9'
+	    && s[7] == '-'
+	    && s[8] >= '0' && s[8] <= '9'
+	    && s[9] >= '0' && s[9] <= '9')
+		return true;
+	else
 		return false;
-	if (!check_digit(s[0]))
-		return false;
-	if (!check_digit(s[1]))
-		return false;
-	if (!check_digit(s[2]))
-		return false;
-	if (!check_digit(s[3]))
-		return false;
-	if (s[4] != '-')
-		return false;
-	if (!check_digit(s[5]))
-		return false;
-	if (!check_digit(s[6]))
-		return false;
-	if (s[7] != '-')
-		return false;
-	if (!check_digit(s[8]))
-		return false;
-	if (!check_digit(s[9]))
-		return false;
-	return true;
 }
 
 void python_get_df(std::vector<std::string>& cmd, database& db)
@@ -50,7 +32,7 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 	std::istringstream                      date {};
 	pybind11::size_t i_m {};
 
-	if (!check_date_format(cmd[2]) || !check_date_format(cmd[3])) {
+	if (!is_date_format(cmd[2]) || !is_date_format(cmd[3])) {
 		std::cout << "Date format is incorrect\n";
 		return;
 	}
@@ -185,11 +167,11 @@ void python_get_df(std::vector<std::string>& cmd, database& db)
 		= db.df[df_index].sr[i].volume -
 		  db.df[df_index].sr[i_m].volume;
 		db.df[df_index].sr_per[i_m].volume
-		= static_cast<double>(db.df[df_index].sr_dif[i_m].volume) /
-		  static_cast<double>(db.df[df_index].sr[i_m].volume);
+		= static_cast<float>(db.df[df_index].sr_dif[i_m].volume) /
+		  static_cast<float>(db.df[df_index].sr[i_m].volume);
 		db.df[df_index].sr_log[i_m].volume
-		= std::log(static_cast<double>(db.df[df_index].sr[i].volume) /
-		           static_cast<double>(db.df[df_index].sr[i_m].volume));
+		= std::log(static_cast<float>(db.df[df_index].sr[i].volume) /
+		           static_cast<float>(db.df[df_index].sr[i_m].volume));
 		if (db.df[df_index].sr_dif[i_m].volume > 0)
 			db.df[df_index].sr_up[i_m].volume = true;
 
