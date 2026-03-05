@@ -1,0 +1,50 @@
+﻿running
+
+"#>" Python-interpreter mode running
+"$>" Python-interpreter mode NOT running
+
+Can be run in either mode:
+help                Print out this message
+exit|q              Exits Python-interpreter mode or progam
+                    depending on what mode you are in
+python              Enters Python-interpreter mode
+ilimit <option>     Sets the maximum number input characters
+                    <option>
+                    (number)     Sets limit to that number
+                    default      Sets limit to the default limit
+                    print        Prints current input limit
+precision <option>  Sets the precision of floating-point numbers
+                    <option>
+                    (number)     Sets precision to that number
+                    default      Sets precision to the default number
+                    print        Prints current set floating-point precision
+print list          Prints list of dataframes with their index.
+print <index> <type>  Prints dataframe of a type.
+                    <type>
+                    <empty>      Prints default dataframe
+                    dif          Prints difference dataframe
+                    per          Prints percentage dataframe
+                    log          Prints log dataframe
+                    up           Prints up or down dataframe
+lstm <index>        Runs LSTM on dataframe
+     <index_test>   <type>
+     <buffer>       index_test   Database use to test LSTM once done training
+     <gap>          buffer       Days between starts of training batches
+     <target>       gap          Days between training batch and target
+     <hidden_size>  target       Number of target days to be averaged
+     <epochs>       hidden_size  Number of neurons
+                    epochs       Number of training loops
+lstm <index>        Runs LSTM on dataframe including the month and the averages
+     <index_test>   of the three sub-dataframes as parameters.
+     <buffer>
+     <gap>
+     <target>
+     <hidden size>
+     <epochs>
+     <subindex> <subindex> <subindex>
+
+Can only be run in Python-interpreter mode:
+debug               List python debug information
+get <ticker> <start_date> <end_date>  Get stock dataframe of TICKER
+                    Format:   get TICKER YYYY-MM-DD YYYY-MM-DD
+                    Example:  get AAPL 2023-01-01 2024-12-31

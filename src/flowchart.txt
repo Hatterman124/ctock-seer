@@ -1,0 +1,26 @@
+﻿struct.h defines common objects (such as the database) and constants (such as UL_LOW, the lowest value an unsigned int can have).
+
+main.cpp is called first. It repeatetly calls menu() in menu.h/cpp until quit.
+From menu(), user typically calls python_get_df() from util.h/cpp to download ticker dataframe using yfinance.
+Back to the menu, the user can call print.h/cpp to print information about the dataframe they downloaded.
+They can also start the lstm by calling lstm.h/cpp.
+
+
+// Things I want to do by priority.
+Fully set up the options.
+	buffer       Days between starts of training batches
+	gap          Days between training batch and target
+	target       Number of target days to be averaged
+Allow user to change trainging batch number.
+Setup a way to print line/bar graph of dataframe.
+Setup a way to save database and trained model to disk.
+Implement option to run data using basic RNN.
+
+
+/*
+ * python_get_df(db[0], "AAPL", "2023-01-01", "2024-12-31");
+ * python_get_df(db[1], "TSLA", "2023-01-01", "2024-12-31");
+ * python_get_df(db[2], "AMZN", "2023-01-01", "2024-12-31");
+ * python_get_df(db[3], "V",    "2023-01-01", "2024-12-31");
+ * python_get_df(db[4], "MSFT", "2023-01-01", "2024-12-31");
+ */

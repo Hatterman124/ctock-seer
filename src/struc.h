@@ -1,13 +1,15 @@
+﻿#ifndef STRUC_H
+#define STRUC_H
+
 #include <array>
 #include <vector>
 #include <string>
 #include <chrono>
 #include <limits>
-#pragma once
 
-constexpr int           I_MIN  {std::numeric_limits<int>::min()};
+constexpr int           I_LOW  {std::numeric_limits<int>::lowest()};
 constexpr int           I_MAX  {std::numeric_limits<int>::max()};
-constexpr unsigned long UL_MIN {std::numeric_limits<unsigned long>::min()};
+constexpr unsigned long UL_LOW {std::numeric_limits<unsigned long>::lowest()};
 constexpr unsigned long UL_MAX {std::numeric_limits<unsigned long>::max()};
 constexpr std::string            WHITESPACE {" \f\n\r\t\v"};
 constexpr std::string::size_type IN_LIMIT_DEFAULT {80};
@@ -66,7 +68,12 @@ struct database {
 };
 
 struct flag {
-	bool                   py_mode;   // Running state of Python Interpreter
-	std::string::size_type in_limit;  // Command input length limit at menu
-	int                    precision; // Floating-point number precision
+	// Running state of Python Interpreter
+	bool                   py_mode   {};
+	// Command input length limit at menu
+	std::string::size_type in_limit  {IN_LIMIT_DEFAULT};
+	// Floating-point number precision
+	int                    precision {PRECISION_DEFAULT};
 };
+
+#endif
