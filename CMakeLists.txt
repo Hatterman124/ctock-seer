@@ -5,7 +5,7 @@ message([STATUS] "Using GCC options \"-Wpedantic -Wall -Wextra std=c++23 -fmodul
 
 add_compile_options(-Wpedantic -Wall -Wextra -std=c++23 -fmodules -O3)
 
-message([STATUS] "Python version is set to EXACT (1.13), change if necessary")
+message([STATUS] "Python version is set to EXACT (3.13.12), change if necessary")
 
 find_package(Python3 3.13.12 EXACT COMPONENTS Interpreter Development REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)

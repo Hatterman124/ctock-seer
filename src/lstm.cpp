@@ -8,10 +8,8 @@
 
 /*
  * tensor[batch_n][Says in one batch][input_size]
- *
- *
- *
- *
+ * i:  Index of tensor
+ * ii: Index of dataframe
  */
 
 void df_to_tensors(const dataframe &df,
@@ -87,7 +85,16 @@ void df_to_tensors(const dataframe &df,
 		inputx[i][9][4] = static_cast<float>(df.sr_up[ii].close);
 		ii += gap + 1;
 		inputy[i] = df.sr[ii + 1].close;
-		ii -= 10;
+		// Implements buffer
+		if (buffer < 10 + gap)
+			ii -= 10 + gap - buffer;
+		else
+			ii += buffer - 10 + gap;
+		// For debugging
+		if (ii >= df.sr_up.size())
+			std::cout << "Over limit.\n";
+		else if (ii >= df.sr_up.size() - 11 + gap)
+			std::cout << "Last batch hit.\n";
 		/*
 		std::cout << "\ntarget day: " << df.sr[ii + 1].close << '\n';
 		for (std::vector<stockrow_b>::size_type iii {};
@@ -245,7 +252,16 @@ void df_to_tensors(const dataframe &df,
 		                  dfs2.sr[ii + 1].close / 3;
 		ii += gap + 1;
 		inputy[i] = df.sr[ii + 1].close;
-		ii -= 10;
+		// Implements buffer
+		if (buffer < 10)
+			ii -= 10 - buffer;
+		else
+			ii += buffer - 10;
+		// For debugging
+		if (ii >= df.sr_up.size())
+			std::cout << "Over limit.\n";
+		else if (ii >= df.sr_up.size() - 11)
+			std::cout << "Last batch hit.\n";
 		/*
 		std::cout << "\ntarget day: " << df.sr[ii + 1].close << '\n';
 		for (std::vector<stockrow_b>::size_type iii {};
@@ -281,7 +297,8 @@ void run_lstm(const dataframe &df,
               const int64_t hidden_size,
               const int64_t epochs)
 {
-	std::vector<stockrow_b>::size_type batch_n {df.sr_up.size() / 11};
+	std::vector<stockrow_b>::size_type batch_n {(df.sr_up.size() - 11 + gap)
+	                                            / buffer + 1};
 	torch::Tensor inputx {torch::empty({static_cast<long>(batch_n),
 	                                    10,
 	                                    5})};
@@ -324,7 +341,7 @@ void run_lstm(const dataframe &df,
 		loss.backward();
 		optimizer.step();
 	}
-	std::cout << model.forward(inputx_test)
+	std::cout //<< model.forward(inputx_test)
 	          << "\nThe last MSE was:\n"
 	          << loss
 	          << "\nThe test MSE is:\n"
@@ -344,7 +361,8 @@ void run_lstm(const dataframe &df,
               const dataframe &dfs1,
               const dataframe &dfs2)
 {
-	std::vector<stockrow_b>::size_type batch_n {df.sr_up.size() / 11};
+	std::vector<stockrow_b>::size_type batch_n {(df.sr_up.size() - 11 + gap)
+	                                            / buffer + 1};
 	torch::Tensor inputx {torch::empty({static_cast<long>(batch_n),
 	                                    10,
 	                                    7})};
@@ -411,7 +429,7 @@ void run_lstm(const dataframe &df,
 		loss.backward();
 		optimizer.step();
 	}
-	std::cout << model.forward(inputx_test)
+	std::cout //<< model.forward(inputx_test)
 	          << "\nThe last MSE was:\n"
 	          << loss
 	          << "\nThe test MSE is:\n"
