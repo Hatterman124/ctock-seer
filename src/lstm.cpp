@@ -6,13 +6,21 @@
 #include <iostream>
 #include <iomanip>
 
-void df_to_tensors(const dataframe& df,
+/*
+ * tensor[batch_n][Says in one batch][input_size]
+ *
+ *
+ *
+ *
+ */
+
+void df_to_tensors(const dataframe &df,
                    const std::vector<stockrow_b>::size_type buffer,
                    const std::vector<stockrow_b>::size_type batch_n,
                    const std::vector<stockrow_b>::size_type gap,
                    const std::vector<stockrow_b>::size_type target,
-                   torch::Tensor& inputx,
-                   torch::Tensor& inputy)
+                   torch::Tensor &inputx,
+                   torch::Tensor &inputy)
 {
 	std::vector<stockrow_b>::size_type ii {};
 	float target_sum {};
@@ -78,6 +86,9 @@ void df_to_tensors(const dataframe& df,
 		inputx[i][9][3] = df.sr_log[ii].close;
 		inputx[i][9][4] = static_cast<float>(df.sr_up[ii].close);
 		ii += gap + 1;
+		inputy[i] = df.sr[ii + 1].close;
+		ii -= 10;
+		/*
 		std::cout << "\ntarget day: " << df.sr[ii + 1].close << '\n';
 		for (std::vector<stockrow_b>::size_type iii {};
 		     iii < target; ++iii) {
@@ -92,21 +103,22 @@ void df_to_tensors(const dataframe& df,
 		          << "\ntarget sum: " << target_sum / target << '\n';
 		target_sum = 0;
 		ii -= 10 - buffer;
+		*/
 	}
 
 	return;
 }
 
-void df_to_tensors(const dataframe& df,
+void df_to_tensors(const dataframe &df,
                    const std::vector<stockrow_b>::size_type buffer,
                    const std::vector<stockrow_b>::size_type batch_n,
                    const std::vector<stockrow_b>::size_type gap,
                    const std::vector<stockrow_b>::size_type target,
-                   const dataframe& dfs0,
-                   const dataframe& dfs1,
-                   const dataframe& dfs2,
-                   torch::Tensor& inputx,
-                   torch::Tensor& inputy)
+                   const dataframe &dfs0,
+                   const dataframe &dfs1,
+                   const dataframe &dfs2,
+                   torch::Tensor &inputx,
+                   torch::Tensor &inputy)
 {
 	std::vector<stockrow_b>::size_type ii {};
 	float target_sum {};
@@ -232,6 +244,9 @@ void df_to_tensors(const dataframe& df,
 		                  dfs1.sr[ii + 1].close *
 		                  dfs2.sr[ii + 1].close / 3;
 		ii += gap + 1;
+		inputy[i] = df.sr[ii + 1].close;
+		ii -= 10;
+		/*
 		std::cout << "\ntarget day: " << df.sr[ii + 1].close << '\n';
 		for (std::vector<stockrow_b>::size_type iii {};
 		     iii < target; ++iii) {
@@ -246,6 +261,7 @@ void df_to_tensors(const dataframe& df,
 		          << "\ntarget sum: " << target_sum / target << '\n';
 		target_sum = 0;
 		ii -= 10 - buffer;
+		*/
 	}
 
 	return;
@@ -257,8 +273,8 @@ void df_to_tensors(const dataframe& df,
  *
  */
 
-void run_lstm(const dataframe& df,
-              const dataframe& df_test,
+void run_lstm(const dataframe &df,
+              const dataframe &df_test,
               const std::vector<stockrow_b>::size_type buffer,
               const std::vector<stockrow_b>::size_type gap,
               const std::vector<stockrow_b>::size_type target,
@@ -289,9 +305,11 @@ void run_lstm(const dataframe& df,
 	}
 	df_to_tensors(df, buffer, batch_n, gap, target, inputx, inputy);
 	df_to_tensors(df_test, buffer, batch_n, gap, target, inputx_test, inputy_test);
-	std::cout << "error before\n";
+	std::cout << "inputx:      " << inputx.sizes()
+	          << "\ninputy:      " << inputy.sizes()
+	          << "\ninputy_test: " << inputx_test.sizes()
+	          << "\ninputy_test: " << inputy_test.sizes() << '\n';
 	lstmmodel model(5, hidden_size, 1, batch_n);
-	std::cout << "error after\n";
 	torch::optim::Adam optimizer(
 		model.parameters(),
 		torch::optim::AdamOptions(0.001)
@@ -315,18 +333,18 @@ void run_lstm(const dataframe& df,
 	return;
 }
 
-void run_lstm(const dataframe& df,
-              const dataframe& df_test,
+void run_lstm(const dataframe &df,
+              const dataframe &df_test,
               const std::vector<stockrow_b>::size_type buffer,
               const std::vector<stockrow_b>::size_type gap,
               const std::vector<stockrow_b>::size_type target,
               const int64_t hidden_size,
               const int64_t epochs,
-              const dataframe& dfs0,
-              const dataframe& dfs1,
-              const dataframe& dfs2)
+              const dataframe &dfs0,
+              const dataframe &dfs1,
+              const dataframe &dfs2)
 {
-	std::vector<stockrow_b>::size_type batch_n {900};
+	std::vector<stockrow_b>::size_type batch_n {df.sr_up.size() / 11};
 	torch::Tensor inputx {torch::empty({static_cast<long>(batch_n),
 	                                    10,
 	                                    7})};
@@ -374,6 +392,10 @@ void run_lstm(const dataframe& df,
 	              dfs2,
 	              inputx_test,
 	              inputy_test);
+	std::cout << "inputx:      " << inputx.sizes()
+	          << "\ninputy:      " << inputy.sizes()
+	          << "\ninputy_test: " << inputx_test.sizes()
+	          << "\ninputy_test: " << inputy_test.sizes() << '\n';
 	lstmmodel model(7, hidden_size, 1, batch_n);
 	torch::optim::Adam optimizer(
 		model.parameters(),

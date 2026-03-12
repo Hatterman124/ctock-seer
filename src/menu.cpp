@@ -175,7 +175,7 @@ void option_lstm(std::vector<std::string> &cmd, database &db)
 		run_lstm(cmd, db);
 	} catch (const std::invalid_argument &ex) {
 		std::cout << "ERROR: std::invalid_argument\nOne or more arguments cannot be convered into an integer\n";
-	} catch (std::out_of_range const &ex) {
+	} catch (const std::out_of_range &ex) {
 		std::cout << "ERROR: std::out_of_range\nThe number you entered cannot fit into the required intiger type.\n";
 	}
 
@@ -292,12 +292,12 @@ void option_precision(const std::vector<std::string> &cmd, flag &f)
 	} else {
 		try {
 			n = std::stoi(cmd[1]);
-		} catch (std::invalid_argument const &ex) {
+		} catch (const std::invalid_argument &ex) {
 			std::cout << "ERROR: std::invalid_argument\nCannot convert \""
 			          << cmd[1]
 			          << "\" into an integer.\n";
 			return;
-		} catch (std::out_of_range const &ex) {
+		} catch (const std::out_of_range &ex) {
 			std::cout << "ERROR: std::out_of_range\n\""
 			          << cmd[1]
 			          << "\" cannot fit into an integer.\nIt must be from "
@@ -403,7 +403,7 @@ bool menu(database &db, flag &f)
 	} else if (cmd[0] == "get" && check_py(f.py_mode)) {
 		try {
 			python_get_df(cmd, db);
-		} catch (pybind11::error_already_set const &ex) {
+		} catch (const pybind11::error_already_set &ex) {
 			std::cout << ex.what()
 			          << "\nERROR: pybind11::error_already_set\nUnable to grab stock data!\n";
 		}
