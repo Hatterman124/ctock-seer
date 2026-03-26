@@ -8,8 +8,6 @@ They can also start the lstm by calling lstm.h/cpp.
 
 // Things I want to do by priority.
 Fully set up the options.
-	buffer       Days between starts of training batches
-	gap          Days between training batch and target
 	target       Number of target days to be averaged
 Allow user to change trainging batch number.
 Setup a way to print line/bar graph of dataframe.

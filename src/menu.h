@@ -18,6 +18,9 @@ void option_lstm(std::vector<std::string> &cmd, database &db);
 // Prints general info of all dataframes or prints all values in one dataframe
 void option_print (std::vector<std::string> &cmd, database &db, const flag &f);
 
+// Prints a line graph of a dataframe
+void option_graph(std::vector<std::string> &cmd, database &db);
+
 // Changes the number limit of characters you can input
 void option_ilimit(const std::vector<std::string> &cmd, flag &f);
 

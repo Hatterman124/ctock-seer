@@ -26,6 +26,9 @@ print <index> <type>  Prints dataframe of a type.
                     per          Prints percentage dataframe
                     log          Prints log dataframe
                     up           Prints up or down dataframe
+graph <index>       Print a line graph of a dataframe
+      <width>       width        Number of characters the width the graph is
+      <height>      height       Number of characters the height the graph is
 lstm <index>        Runs LSTM on dataframe
      <index_test>   <type>
      <buffer>       index_test   Database use to test LSTM once done training

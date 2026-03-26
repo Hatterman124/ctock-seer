@@ -1,12 +1,12 @@
 ﻿#include "print.h"
 #include "struc.h"
-#include <pybind11/embed.h>
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <string>
+#include <cmath>
 
-void print_df(const std::vector<stockrow> df,
+void print_df(const std::vector<stockrow> &df,
               const flag &f,
               const bool neg)
 {
@@ -72,7 +72,7 @@ void print_df(const std::vector<stockrow> df,
 	return;
 }
 
-void print_df(const std::vector<stockrow_f> df,
+void print_df(const std::vector<stockrow_f> &df,
               const flag &f,
               const bool per)
 {
@@ -142,7 +142,7 @@ void print_df(const std::vector<stockrow_f> df,
 	return;
 }
 
-void print_df(const std::vector<stockrow_b> df)
+void print_df(const std::vector<stockrow_b> &df)
 {
 	//Print
 	for (std::vector<stockrow>::size_type i {}; i < df.size(); ++i ) {
@@ -160,4 +160,75 @@ void print_df(const std::vector<stockrow_b> df)
 	}
 
 	return;
+}
+
+void graph_df(const std::vector<stockrow> &df,
+              const unsigned long wd,
+              const unsigned long ht)
+{
+	if (df.empty())
+		return;
+
+	const unsigned long ht_minus {ht - 1};
+	std::string graph {};
+	std::vector<unsigned long> graph_num {};
+	// Number of prices per chars.
+	std::vector<stockrow>::size_type w_n {df.size() / wd};
+	float w_nf {static_cast<float>(w_n)};
+	float min {df[0].close};
+	float max {df[0].close};
+
+	graph_num.reserve(wd);
+	for (std::vector<stockrow>::size_type i {1}; i < df.size(); ++i) {
+		if (df[i].close < min)
+			min = df[i].close;
+		else if (df[i].close > max)
+			max = df[i].close;
+	}
+
+	// Size of char block.
+	float h_n { (std::ceilf(max) - std::floorf(min)) / ht};
+	float avg {};
+
+	std::cout << "size: " << df.size()
+	          << "\nmin: " << min
+	          << "\nmax: " << max
+	          << "\nw_n: " << w_n
+	          << "\nh_n: " << h_n << '\n';;
+
+	/*
+	 * i:   Index for assigning graph_num.
+	 * i_df:  Index for traversing df.
+	 * ii: Index to know when to stop average batch
+	 *
+	 */
+	std::vector<stockrow>::size_type i_df {};
+	for (std::vector<unsigned long>::size_type i {}; i < wd; ++i) {
+		for (std::vector<stockrow>::size_type ii {};
+		     ii < w_n;
+		     ++ii) {
+			avg += df[i_df].close;
+			++i_df;
+		}
+		avg /= w_nf;
+		std::cout << h_n << " / " << avg - std::floorf(min) << '\n';
+		graph_num.push_back(
+			static_cast<unsigned long>(
+				(avg - std::floorf(min)) / h_n
+			)
+		);
+		avg = 0;
+	}
+	for (unsigned long n : graph_num)
+		std::cout << n << '\n';
+	for (unsigned int i {}; i < ht; ++i) {
+		for (unsigned int ii {}; ii < wd; ++ii) {
+			if (graph_num[ii] == ht_minus - i)
+				graph.push_back('*');
+			else
+				graph.push_back(' ');
+		}
+		graph.push_back('\n');
+	}
+	std::cout << graph;
 }

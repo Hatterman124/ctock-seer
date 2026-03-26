@@ -2,7 +2,6 @@
 #define PRINT_H
 
 #include "struc.h"
-#include <pybind11/embed.h>
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -24,16 +23,21 @@ int getw(T greatest_n)
 }
 
 // Prints dataframe
-void print_df(const std::vector<stockrow> df,
+void print_df(const std::vector<stockrow> &df,
               const flag &f,
               const bool neg);
 
 // Prints floating-point dataframe
-void print_df(const std::vector<stockrow_f> df,
+void print_df(const std::vector<stockrow_f> &df,
               const flag &f,
               const bool per);
 
 // Prints boolean dataframe
-void print_df(const std::vector<stockrow_b> df);
+void print_df(const std::vector<stockrow_b> &df);
+
+// Print graph of stock
+void graph_df(const std::vector<stockrow> &df,
+              const unsigned long width,
+              const unsigned long height);
 
 #endif

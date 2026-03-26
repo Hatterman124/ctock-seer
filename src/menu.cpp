@@ -187,7 +187,7 @@ void option_lstm(std::vector<std::string> &cmd, database &db)
 	return;
 }
 
-void option_print (std::vector<std::string> &cmd, database &db, const flag &f)
+void option_print(std::vector<std::string> &cmd, database &db, const flag &f)
 {
 	int width {getw<std::vector<std::string>::size_type>(db.df.size())};
 	std::vector<dataframe>::size_type index {};
@@ -233,6 +233,52 @@ void option_print (std::vector<std::string> &cmd, database &db, const flag &f)
 	} else if (cmd[2] == "up") {
 		print_df(db.df[index].sr_up);
 	}
+
+	return;
+}
+
+void option_graph(std::vector<std::string> &cmd, database &db)
+{
+	std::vector<dataframe>::size_type index {};
+	unsigned long wd {80};
+	unsigned long ht {30};
+
+	if (cmd.size() == 1) {
+		std::cout << "Not enough arguments.\n";
+		return;
+	}
+	try {
+		index = static_cast<std::vector<dataframe>::size_type>(
+			std::stoull(cmd[1])
+		);
+	} catch (...) {
+		std::cout << "Cannot convert " << cmd[1] << " to an index\n";
+		return;
+	}
+	if (cmd[1][0] == '-') {
+		std::cout << "Index cannot be a negative number\n";
+	} else if (index >= db.df.size()) {
+		std::cout << "There is not a dataframe releated to that index\nPlease run \"print list\"\n";
+	} else if (cmd.size() == 3) {
+		try {
+			wd = static_cast<std::vector<dataframe>::size_type>(
+				std::stoull(cmd[2])
+			);
+		} catch (...) {
+			std::cout << "Cannot convert " << cmd[2] << " to width\n";
+		return;
+		}
+	} else if (cmd.size() == 4) {
+		try {
+			ht = static_cast<std::vector<dataframe>::size_type>(
+				std::stoull(cmd[3])
+			);
+		} catch (...) {
+			std::cout << "Cannot convert " << cmd[3] << " to height\n";
+		return;
+		}
+	}
+	graph_df(db.df[index].sr, wd, ht);
 
 	return;
 }
@@ -382,7 +428,7 @@ bool menu(database &db, flag &f)
 		std::cout << "The Python interpreter is currently ";
 		if (!f.py_mode)
 			std::cout << "not ";
-		std::cout << "running\n\n\"#>\" Python-interpreter mode running\n\"$>\" Python-interpreter mode NOT running\n\nCan be run in either mode:\nhelp                Print out this message\nexit|q              Exits Python-interpreter mode or progam\n                    depending on what mode you are in\npython              Enters Python-interpreter mode\nilimit <option>     Sets the maximum number input characters\n                    <option>\n                    (number)     Sets limit to that number\n                    default      Sets limit to the default limit\n                    print        Prints current input limit\nprecision <option>  Sets the precision of floating-point numbers\n                    <option>\n                    (number)     Sets precision to that number\n                    default      Sets precision to the default number\n                    print        Prints current set floating-point precision\nprint list          Prints list of dataframes with their index.\nprint <index> <type>  Prints dataframe of a type.\n                    <type>\n                    <empty>      Prints default dataframe\n                    dif          Prints difference dataframe\n                    per          Prints percentage dataframe\n                    log          Prints log dataframe\n                    up           Prints up or down dataframe\nlstm <index>        Runs LSTM on dataframe\n     <index_test>   <type>\n     <buffer>       index_test   Database use to test LSTM once done training\n     <gap>          buffer       Days between starts of training batches\n     <target>       gap          Days between training batch and target\n     <hidden_size>  target       Number of target days to be averaged\n     <epochs>       hidden_size  Number of neurons\n                    epochs       Number of training loops\nlstm <index>        Runs LSTM on dataframe including the month and the averages\n     <index_test>   of the three sub-dataframes as parameters.\n     <buffer>\n     <gap>\n     <target>\n     <hidden size>\n     <epochs>\n     <subindex> <subindex> <subindex>\n\nCan only be run in Python-interpreter mode:\ndebug               List python debug information\nget <ticker> <start_date> <end_date>  Get stock dataframe of TICKER\n                    Format:   get TICKER YYYY-MM-DD YYYY-MM-DD\n                    Example:  get AAPL 2023-01-01 2024-12-31\n\n";
+		std::cout << "running\n\n\"#>\" Python-interpreter mode running\n\"$>\" Python-interpreter mode NOT running\n\nCan be run in either mode:\nhelp                Print out this message\nexit|q              Exits Python-interpreter mode or progam\n                    depending on what mode you are in\npython              Enters Python-interpreter mode\nilimit <option>     Sets the maximum number input characters\n                    <option>\n                    (number)     Sets limit to that number\n                    default      Sets limit to the default limit\n                    print        Prints current input limit\nprecision <option>  Sets the precision of floating-point numbers\n                    <option>\n                    (number)     Sets precision to that number\n                    default      Sets precision to the default number\n                    print        Prints current set floating-point precision\nprint list          Prints list of dataframes with their index.\nprint <index> <type>  Prints dataframe of a type.\n                    <type>\n                    <empty>      Prints default dataframe\n                    dif          Prints difference dataframe\n                    per          Prints percentage dataframe\n                    log          Prints log dataframe\n                    up           Prints up or down dataframe\ngraph <index>       Print a line graph of a dataframe\n      <width>       width        Number of characters the width the graph is\n      <height>      height       Number of characters the height the graph is\nlstm <index>        Runs LSTM on dataframe\n     <index_test>   <type>\n     <buffer>       index_test   Database use to test LSTM once done training\n     <gap>          buffer       Days between starts of training batches\n     <target>       gap          Days between training batch and target\n     <hidden_size>  target       Number of target days to be averaged\n     <epochs>       hidden_size  Number of neurons\n                    epochs       Number of training loops\nlstm <index>        Runs LSTM on dataframe including the month and the averages\n     <index_test>   of the three sub-dataframes as parameters.\n     <buffer>\n     <gap>\n     <target>\n     <hidden size>\n     <epochs>\n     <subindex> <subindex> <subindex>\n\nCan only be run in Python-interpreter mode:\ndebug               List python debug information\nget <ticker> <start_date> <end_date>  Get stock dataframe of TICKER\n                    Format:   get TICKER YYYY-MM-DD YYYY-MM-DD\n                    Example:  get AAPL 2023-01-01 2024-12-31\n\n";
 	} else if (cmd[0] == "python") {
 		if (f.py_mode) {
 			std::cout << "Python interpreter is already running.\n";
@@ -396,6 +442,8 @@ bool menu(database &db, flag &f)
 		option_ilimit(cmd, f);
 	} else if (cmd[0] == "print") {
 		option_print(cmd, db, f);
+	} else if (cmd[0] == "graph") {
+		option_graph(cmd, db);
 	} else if (cmd[0] == "lstm") {
 		option_lstm(cmd, db);
 	} else if (cmd[0] == "debug" && check_py(f.py_mode)) {
