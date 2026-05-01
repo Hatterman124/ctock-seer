@@ -1,7 +1,7 @@
-﻿#ifndef LSTM_H
+#ifndef LSTM_H
 #define LSTM_H
 
-#include "struc.h"
+#include "tdatabase.h"
 #include <torch/torch.h>
 #include <cstdint>
 #include <stdfloat>
@@ -35,46 +35,32 @@ struct lstmmodel : torch::nn::Module {
 	torch::Tensor     out;
 };
 
-// Converts custom-made dataframe to a tensor object
-void df_to_tensors(const dataframe &df,
-                   const std::vector<stockrow_b>::size_type buffer,
-                   const std::vector<stockrow_b>::size_type batch_n,
-                   const std::vector<stockrow_b>::size_type gap,
-                   const std::vector<stockrow_b>::size_type target,
-                   torch::Tensor &inputx,
-                   torch::Tensor &inputy);
-
-// Includes data fom three other tickers (stocks)
-void df_to_tensors(const dataframe &df,
-                   const std::vector<stockrow_b>::size_type buffer,
-                   const std::vector<stockrow_b>::size_type batch_n,
-                   const std::vector<stockrow_b>::size_type gap,
-                   const std::vector<stockrow_b>::size_type target,
-                   const dataframe &dfs0,
-                   const dataframe &dfs1,
-                   const dataframe &dfs2,
-                   torch::Tensor &inputx,
-                   torch::Tensor &inputy);
-
 // Trains LSTM and prints results
-void run_lstm(const dataframe &df,
-              const dataframe &df_test,
-              const std::vector<stockrow_b>::size_type buffer,
-              const std::vector<stockrow_b>::size_type gap,
-              const std::vector<stockrow_b>::size_type target,
-              const int64_t hidden_size,
-              const int64_t epochs);
+int run_lstm(const tdataframe &df,
+             const tdataframe &df_test,
+             const std::vector<stockrow>::size_type batch,
+             const std::vector<stockrow>::size_type buffer,
+             const std::vector<stockrow>::size_type gap,
+             const std::vector<stockrow>::size_type target,
+             const std::int64_t hidden_size,
+             const std::int64_t epochs);
 
-// Includes data fom three other tickers (stocks)
-void run_lstm(const dataframe &df,
-              const dataframe &df_test,
-              const std::vector<stockrow_b>::size_type buffer,
-              const std::vector<stockrow_b>::size_type gap,
-              const std::vector<stockrow_b>::size_type target,
-              const int64_t hidden_size,
-              const int64_t epochs,
-              const dataframe &dfs0,
-              const dataframe &dfs1,
-              const dataframe &dfs2);
+int run_lstm_q(const tdataframe &df,
+               const tdataframe &df_test,
+               const std::vector<stockrow>::size_type batch,
+               const std::vector<stockrow>::size_type buffer,
+               const std::vector<stockrow>::size_type gap,
+               const std::vector<stockrow>::size_type target,
+               const std::int64_t hidden_size,
+               const std::int64_t epochs);
+
+void df_to_tensor(const tdataframe &df,
+                  const std::vector<stockrow>::size_type batch_n,
+                  const std::vector<stockrow>::size_type batch,
+                  const std::vector<stockrow>::size_type buffer,
+                  const std::vector<stockrow>::size_type gap,
+                  const std::vector<stockrow>::size_type target,
+                  torch::Tensor &inputx,
+                  torch::Tensor &inputy                         );
 
 #endif

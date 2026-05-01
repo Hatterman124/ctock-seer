@@ -1,0 +1,650 @@
+Use median and mode in target
+Include info about PyTorch
+
+Use squared mean
+
+Structure of a Research Article
+
+In general, a research paper consists of the following parts:
+
+    Keywords
+
+    Abstract
+
+    Introduction
+
+    Literature Review
+
+    Methodology
+
+    Experiments, Results, and Discussions
+
+    Conclusions
+
+    References
+
+
+April 21 Abstract Deadline
+
+May 1 Conference
+
+TRAINING: 2019-01-01 2024-12-31
+
+TEST:     2020-01-01 2025-12-31
+
+get ^SPX 2021-01-01 2024-12-31 && get ^SPX 2022-01-01 2026-01-07 && get AAPL 2021-01-01 2024-12-31 && get AAPL 2022-01-01 2026-01-07 && get V 2021-01-01 2024-12-31 && get V 2022-01-01 2026-01-07 && get TSLA 2021-01-01 2024-12-31 && get TSLA 2022-01-01 2026-01-07 && get NVDA 2021-01-01 2024-12-31 && get NVDA 2022-01-01 2026-01-07 && echo got all
+
+lstm -q 6 7 16 1 128 8 256 1024 && lstm -q 6 7 16 1 64 8 256 1024 && lstm -q 6 7 16 1 32 8 256 1024 && lstm -q 6 7 16 1 16 8 256 1024 && lstm -q 6 7 16 1 8 8 256 1024 && lstm -q 6 7 16 1 4 8 256 1024 && lstm -q 6 7 16 1 2 8 256 1024 && lstm -q 6 7 16 1 1 8 256 1024 && echo done
+
+
+^SPX
+batch:       16
+buffer:      1
+gap:         128
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     853
+   0: 21449310
+[ CPUFloatType{} ]
+
+The last MSE was:
+20517906
+[ CPUFloatType{} ]
+The test MSE is:
+26202696
+[ CPUFloatType{} ]
+
+
+^SPX
+batch:       16
+buffer:      1
+gap:         64
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     917
+   0: 21222854
+[ CPUFloatType{} ]
+
+The last MSE was:
+20304154
+[ CPUFloatType{} ]
+The test MSE is:
+25420252
+[ CPUFloatType{} ]
+
+
+^SPX
+batch:       16
+buffer:      1
+gap:         32
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     949
+   0: 21069680
+[ CPUFloatType{} ]
+
+The last MSE was:
+20155060
+[ CPUFloatType{} ]
+The test MSE is:
+25193140
+[ CPUFloatType{} ]
+
+
+^SPX
+batch:       16
+buffer:      1
+gap:         16
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     965
+   0: 20970552
+[ CPUFloatType{} ]
+
+The last MSE was:
+19958458
+[ CPUFloatType{} ]
+The test MSE is:
+24956420
+[ CPUFloatType{} ]
+
+
+^SPX
+batch:       16
+buffer:      1
+gap:         8
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     973
+   0: 20923668
+[ CPUFloatType{} ]
+
+The last MSE was:
+19951348
+[ CPUFloatType{} ]
+The test MSE is:
+24946306
+[ CPUFloatType{} ]
+
+
+^SPX
+batch:       16
+buffer:      1
+gap:         4
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     977
+   0: 20900212
+[ CPUFloatType{} ]
+
+The last MSE was:
+20006016
+[ CPUFloatType{} ]
+The test MSE is:
+25008592
+[ CPUFloatType{} ]
+
+
+^SPX
+batch:       16
+buffer:      1
+gap:         2
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     979
+   0: 20888052
+[ CPUFloatType{} ]
+
+The last MSE was:
+19953366
+[ CPUFloatType{} ]
+The test MSE is:
+24953362
+[ CPUFloatType{} ]
+
+
+^SPX
+batch:       16
+buffer:      1
+gap:         1
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     980
+   0: 20881424
+[ CPUFloatType{} ]
+
+The last MSE was:
+19882578
+[ CPUFloatType{} ]
+The test MSE is:
+24875778
+[ CPUFloatType{} ]
+--------------------------------------------------------------------------------
+AAPL
+batch:       16
+buffer:      1
+gap:         64
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     917
+   0: 29646.552734375
+[ CPUFloatType{} ]
+
+The last MSE was:
+5807.87255859375
+[ CPUFloatType{} ]
+The test MSE is:
+10173.67578125
+[ CPUFloatType{} ]
+AAPL
+batch:       16
+buffer:      1
+gap:         64
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     917
+   0: 29648.5703125
+[ CPUFloatType{} ]
+
+The last MSE was:
+7569.5
+[ CPUFloatType{} ]
+The test MSE is:
+12540.7275390625
+[ CPUFloatType{} ]
+AAPL
+batch:       16
+buffer:      1
+gap:         64
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     917
+   0: 29649.498046875
+[ CPUFloatType{} ]
+
+The last MSE was:
+6594.31201171875
+[ CPUFloatType{} ]
+The test MSE is:
+11289.77734375
+[ CPUFloatType{} ]
+AAPL
+batch:       16
+buffer:      1
+gap:         32
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     949
+   0: 29177.576171875
+[ CPUFloatType{} ]
+
+The last MSE was:
+5626.830078125
+[ CPUFloatType{} ]
+The test MSE is:
+10044.9765625
+[ CPUFloatType{} ]
+AAPL
+batch:       16
+buffer:      1
+gap:         16
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     965
+   0: 28931.380859375
+[ CPUFloatType{} ]
+
+The last MSE was:
+5627.5830078125
+[ CPUFloatType{} ]
+The test MSE is:
+9946.1611328125
+[ CPUFloatType{} ]
+AAPL
+batch:       16
+buffer:      1
+gap:         8
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     973
+   0: 28829.099609375
+[ CPUFloatType{} ]
+
+The last MSE was:
+6850.99951171875
+[ CPUFloatType{} ]
+The test MSE is:
+11616.349609375
+[ CPUFloatType{} ]
+AAPL
+batch:       16
+buffer:      1
+gap:         4
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     977
+   0: 28774.068359375
+[ CPUFloatType{} ]
+
+The last MSE was:
+4028.52685546875
+[ CPUFloatType{} ]
+The test MSE is:
+7825.064453125
+[ CPUFloatType{} ]
+AAPL
+batch:       16
+buffer:      1
+gap:         2
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     979
+   0: 28754.95703125
+[ CPUFloatType{} ]
+
+The last MSE was:
+5595.3203125
+[ CPUFloatType{} ]
+The test MSE is:
+10037.2001953125
+[ CPUFloatType{} ]
+AAPL
+batch:       16
+buffer:      1
+gap:         1
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     980
+   0: 28743.421875
+[ CPUFloatType{} ]
+
+The last MSE was:
+5858.20703125
+[ CPUFloatType{} ]
+The test MSE is:
+10279.7177734375
+[ CPUFloatType{} ]
+
+--------------------------------------------------------------------------------
+
+V
+batch:       16
+buffer:      1
+gap:         128
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     853
+   0: 55235.50390625
+[ CPUFloatType{} ]
+
+The last MSE was:
+20613.48046875
+[ CPUFloatType{} ]
+The test MSE is:
+35132.63671875
+[ CPUFloatType{} ]
+
+
+V
+batch:       16
+buffer:      1
+gap:         64
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     917
+   0: 54974.64453125
+[ CPUFloatType{} ]
+
+The last MSE was:
+18188.599609375
+[ CPUFloatType{} ]
+The test MSE is:
+30550.66015625
+[ CPUFloatType{} ]
+
+
+V
+batch:       16
+buffer:      1
+gap:         32
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     949
+   0: 54658.6484375
+[ CPUFloatType{} ]
+
+The last MSE was:
+15388.2880859375
+[ CPUFloatType{} ]
+The test MSE is:
+26548.4453125
+[ CPUFloatType{} ]
+
+
+V
+batch:       16
+buffer:      1
+gap:         16
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     965
+   0: 54491.5859375
+[ CPUFloatType{} ]
+
+The last MSE was:
+18810.353515625
+[ CPUFloatType{} ]
+The test MSE is:
+30748.232421875
+[ CPUFloatType{} ]
+
+
+V
+batch:       16
+buffer:      1
+gap:         8
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     973
+   0: 54372.58203125
+[ CPUFloatType{} ]
+
+The last MSE was:
+18550.013671875
+[ CPUFloatType{} ]
+The test MSE is:
+30328.861328125
+[ CPUFloatType{} ]
+
+
+V
+batch:       16
+buffer:      1
+gap:         4
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     977
+   0: 54314.98046875
+[ CPUFloatType{} ]
+
+The last MSE was:
+18101.111328125
+[ CPUFloatType{} ]
+The test MSE is:
+29847.806640625
+[ CPUFloatType{} ]
+
+
+V
+batch:       16
+buffer:      1
+gap:         2
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     979
+   0: 54282.07421875
+[ CPUFloatType{} ]
+
+The last MSE was:
+16693.33984375
+[ CPUFloatType{} ]
+The test MSE is:
+28046.4453125
+[ CPUFloatType{} ]
+
+
+V
+batch:       16
+buffer:      1
+gap:         1
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     980
+   0: 54267.32421875
+[ CPUFloatType{} ]
+
+The last MSE was:
+17081.72265625
+[ CPUFloatType{} ]
+The test MSE is:
+28511.78515625
+[ CPUFloatType{} ]
+
+--------------------------------------------------------------------------------
+
+TSLA
+batch:       16
+buffer:      1
+gap:         128
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     853
+   0: 63208.1640625
+[ CPUFloatType{} ]
+
+The last MSE was:
+22849.046875
+[ CPUFloatType{} ]
+The test MSE is:
+32522.828125
+[ CPUFloatType{} ]
+
+
+TSLA
+batch:       16
+buffer:      1
+gap:         64
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     917
+   0: 61954.96484375
+[ CPUFloatType{} ]
+
+The last MSE was:
+24032.81640625
+[ CPUFloatType{} ]
+The test MSE is:
+33897.66015625
+[ CPUFloatType{} ]
+
+
+TSLA
+batch:       16
+buffer:      1
+gap:         32
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     949
+   0: 61641.76953125
+[ CPUFloatType{} ]
+
+The last MSE was:
+21185.05078125
+[ CPUFloatType{} ]
+The test MSE is:
+31715.3984375
+[ CPUFloatType{} ]
+
+
+TSLA
+batch:       16
+buffer:      1
+gap:         16
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     965
+   0: 61451.96875
+[ CPUFloatType{} ]
+
+The last MSE was:
+22271.8828125
+[ CPUFloatType{} ]
+The test MSE is:
+33009.33203125
+[ CPUFloatType{} ]
+
+
+TSLA
+batch:       16
+buffer:      1
+gap:         8
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     973
+   0: 61484.48046875
+[ CPUFloatType{} ]
+
+The last MSE was:
+25572.85546875
+[ CPUFloatType{} ]
+The test MSE is:
+36830.125
+[ CPUFloatType{} ]
+
+
+TSLA
+batch:       16
+buffer:      1
+gap:         4
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     977
+   0: 61551.76953125
+[ CPUFloatType{} ]
+
+The last MSE was:
+23398.6015625
+[ CPUFloatType{} ]
+The test MSE is:
+34341.578125
+[ CPUFloatType{} ]
+
+
+TSLA
+batch:       16
+buffer:      1
+gap:         2
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     979
+   0: 61593.296875
+[ CPUFloatType{} ]
+
+The last MSE was:
+22668.169921875
+[ CPUFloatType{} ]
+The test MSE is:
+33543.38671875
+[ CPUFloatType{} ]
+
+
+TSLA
+batch:       16
+buffer:      1
+gap:         1
+target:      8
+hidden_size: 256
+epochs:      1024
+batch_n:     980
+   0: 61610.7421875
+[ CPUFloatType{} ]
+
+The last MSE was:
+20629.66796875
+[ CPUFloatType{} ]
+The test MSE is:
+31227.80078125
+[ CPUFloatType{} ]
+done

@@ -15,16 +15,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
 add_executable(ctock-seer)
 target_sources(ctock-seer PRIVATE
-	src/struc.h
-	src/util.h
-	src/util.cpp
-	src/print.h
-	src/print.cpp
-	src/lstm.h
+	src/getw.cpp
+	src/tdatabase.cpp
 	src/lstm.cpp
-	src/menu.h
 	src/menu.cpp
-	src/main.cpp
 )
 target_link_libraries(ctock-seer PRIVATE pybind11::embed)
 target_link_libraries(ctock-seer PRIVATE "${TORCH_LIBRARIES}")

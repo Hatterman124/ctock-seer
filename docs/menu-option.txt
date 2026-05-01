@@ -1,0 +1,83 @@
+﻿running
+
+"#>" Python-interpreter mode running
+"$>" Python-interpreter mode NOT running
+
+OPERATORS:
+;                   Runs command after
+                    Example: echo foo; echo bar
+                             Will run both echo commands
+&&                  Runs command if last-executed command was successful.
+                    Example: true && echo foo; false && echo bar
+                             Will run echo foo but not echo bar
+||                  Runs command if last-executed command was not successful.
+                    Example: true || echo foo; false || echo bar
+                             Will NOT run echo foo but will run echo bar
+                    Example: true || echo foo || echo bar
+                             Will NOT run any echo commands as technically
+                             the last-executed command for both is
+                             the first one
+
+Short options such as -c and -i can only be in the first argument after
+the command. They can be combined such as -ci. Having -- in the first argument
+after the command will make the command ignore it.
+Example: echo -q -n foo
+         Will output "-n" "foo" since only -q is accepted as an option
+Example: echo -qn foo
+         Will outout "foo" without tailing newline since both -q and -n
+         are accepted as options
+Example: echo -- -qn foo
+         Will outout -qn foo since no options are taken
+
+COMMANDS:
+Can be run in either mode:
+help                Prints out this message
+exit|q              Exits Python-interpreter mode or program
+                    depending on what mode you are in
+true                Does nothing and returns true
+false               Does nothing and returns false
+echo <option>       Prints its arguments
+                    <option>
+                    -n           Do not output the trailing newline
+                    -q           Put quotation marks around each argument
+python              Enters Python-interpreter mode
+history <option>    Prints entered commands
+                    <option>
+                    (number)     Number of commands to list
+                    clear        Deletes all history
+ilimit <option>     Sets the maximum number of input characters
+                    <option>
+                    (number)     Sets limit to that number
+                    default      Sets limit to the default limit
+                    print        Prints current input limit
+precision <option>  Sets the precision of floating-point numbers
+                    <option>
+                    (number)     Sets precision to that number
+                    default      Sets precision to the default number
+                    print        Prints current set floating-point precision
+pi                  Prints the irrational number pi
+                    Used to test precision
+print list          Prints list of dataframes with their index.
+print <index>       Prints dataframe of a type.
+graph <index>       Print a line graph of a dataframe
+      <width>       width        Number of characters the width the graph is
+      <height>      height       Number of characters the height the graph is
+lstm <option>       Runs LSTM on dataframe
+     <index>        <option>
+     <index_test>   -s           Run silently, only output final MSE
+     <batch>        <type>
+     <buffer>       index        Database use to train LSTM
+     <gap>          index_test   Database use to test LSTM once done training
+     <target>       batch        Days to use as training
+     <hidden_size>  buffer       Days between starts of training batches
+     <epochs>       gap          Days between training batch and target
+                    target       Number of target days to be averaged
+                    hidden_size  Number of neurons
+                    epochs       Number of training loops
+
+Can only be run in Python-interpreter mode:
+debug               List python debug information
+get <ticker> <start_date> <end_date>  Get stock dataframe of TICKER
+                    Format:   get TICKER YYYY-MM-DD YYYY-MM-DD
+                    Example:  get AAPL 2023-01-01 2024-12-31
+
